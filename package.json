@@ -1,0 +1,50 @@
+{
+  "name": "@pfxamd/rename-x",
+  "version": "0.1.0",
+  "description": "Open-source batch file renaming engine with rule-based pipelines, preview, validation, and conflict detection.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "pfxamd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pfxamd/pfx-rename-x.git"
+  },
+  "homepage": "https://github.com/pfxamd/pfx-rename-x#readme",
+  "bugs": "https://github.com/pfxamd/pfx-rename-x/issues",
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ci": "npm run check && npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.1",
+    "eslint": "^10.10.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.3"
+  }
+}
