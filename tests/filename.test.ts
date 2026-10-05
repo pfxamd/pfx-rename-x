@@ -14,3 +14,11 @@ describe("parseFilename", () => {
     expect(parseFilename("README")).toEqual({ basename: "README", extension: "" });
   });
 });
+
+it("keeps trailing dots in the basename for validation", () => {
+  expect(parseFilename("file.")).toEqual({ basename: "file.", extension: "" });
+});
+
+it("does not split a single-dot parent token", () => {
+  expect(parseFilename("..")).toEqual({ basename: "..", extension: "" });
+});

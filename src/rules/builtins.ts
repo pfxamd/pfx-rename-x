@@ -72,7 +72,7 @@ const findReplaceHandler: RuleHandler<FindReplaceConfig> = {
   apply: (s, c) => {
     const flags = `${c.replaceAll === false ? "" : "g"}${c.matchCase ? "" : "i"}`;
     const escaped = c.find.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return updateBasename(s, s.current.basename.replace(new RegExp(escaped, flags), c.replace));
+    return updateBasename(s, s.current.basename.replace(new RegExp(escaped, flags), () => c.replace));
   },
 };
 
@@ -114,13 +114,13 @@ const caseHandler: RuleHandler<CaseConfig> = {
   type: "case",
   version: 1,
   validate: (c) => ["lowercase", "uppercase", "title", "sentence"].includes(c?.mode) ? ok() : invalid("unsupported case mode"),
-  apply: (s, c) => {
+  apply: (s, c, ctx) => {
     const v = s.current.basename;
     let next = v;
-    if (c.mode === "lowercase") next = v.toLocaleLowerCase();
-    if (c.mode === "uppercase") next = v.toLocaleUpperCase();
-    if (c.mode === "title") next = v.toLocaleLowerCase().replace(/(^|[\s_-])([\p{L}\p{N}])/gu, (_, a: string, b: string) => a + b.toLocaleUpperCase());
-    if (c.mode === "sentence") next = v.length ? v[0]!.toLocaleUpperCase() + v.slice(1).toLocaleLowerCase() : v;
+    if (c.mode === "lowercase") next = v.toLocaleLowerCase(ctx.locale);
+    if (c.mode === "uppercase") next = v.toLocaleUpperCase(ctx.locale);
+    if (c.mode === "title") next = v.toLocaleLowerCase(ctx.locale).replace(/(^|[\s_-])([\p{L}\p{N}])/gu, (_, a: string, b: string) => a + b.toLocaleUpperCase(ctx.locale));
+    if (c.mode === "sentence") next = v.length ? v[0]!.toLocaleUpperCase(ctx.locale) + v.slice(1).toLocaleLowerCase(ctx.locale) : v;
     return updateBasename(s, next);
   },
 };
@@ -196,10 +196,10 @@ const extensionHandler: RuleHandler<ExtensionConfig> = {
   validate: (c) => ["keep", "lowercase", "uppercase", "replace"].includes(c?.mode) && (c.mode !== "replace" || typeof c.value === "string")
     ? ok()
     : invalid("invalid extension rule config"),
-  apply: (s, c) => {
+  apply: (s, c, ctx) => {
     if (c.mode === "keep") return s;
-    if (c.mode === "lowercase") return { ...s, current: { ...s.current, extension: s.current.extension.toLocaleLowerCase() } };
-    if (c.mode === "uppercase") return { ...s, current: { ...s.current, extension: s.current.extension.toLocaleUpperCase() } };
+    if (c.mode === "lowercase") return { ...s, current: { ...s.current, extension: s.current.extension.toLocaleLowerCase(ctx.locale) } };
+    if (c.mode === "uppercase") return { ...s, current: { ...s.current, extension: s.current.extension.toLocaleUpperCase(ctx.locale) } };
     return { ...s, current: { ...s.current, extension: (c.value ?? "").replace(/^\./, "") } };
   },
 };
@@ -229,10 +229,10 @@ const sanitizeHandler: RuleHandler<SanitizeConfig> = {
   validate: (c) => typeof (c?.replacement ?? "-") === "string" ? ok() : invalid("sanitize replacement must be a string"),
   apply: (s, c) => {
     const replacement = c.replacement ?? "-";
-    let value = s.current.basename.replace(/[<>:"/\\|?*\u0000-\u001F]/g, replacement);
+    let value = s.current.basename.replace(/[<>:"/\\|?*\u0000-\u001F]/g, () => replacement);
     if (c.collapseRepeated !== false && replacement) {
       const escaped = replacement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      value = value.replace(new RegExp(`(?:${escaped}){2,}`, "g"), replacement);
+      value = value.replace(new RegExp(`(?:${escaped}){2,}`, "g"), () => replacement);
     }
     return updateBasename(s, value);
   },

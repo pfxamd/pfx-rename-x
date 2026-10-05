@@ -52,6 +52,16 @@ const result = rename({
 });
 ```
 
+
+## Safety defaults
+
+- `originalName` must be a filename, not a filesystem path.
+- Duplicate input IDs are rejected.
+- Output conflicts are checked case-insensitively by default.
+- Unicode collision detection uses NFC normalization by default and can be disabled with `unicodeNormalization: "none"`.
+- A manifest is never emitted when output names conflict, even when `conflictStrategy` is set to `"warn"`.
+- `maxNameLength` counts Unicode code points rather than UTF-16 code units.
+
 ## Built-in rules
 
 - Prefix
@@ -69,13 +79,13 @@ const result = rename({
 
 ```text
 Input
-â Parse filename
-â Validate rules
-â Apply enabled rules in order
-â Validate filenames
-â Detect collection conflicts
-â Build preview
-â Build manifest
+→ Parse filename
+→ Validate rules
+→ Apply enabled rules in order
+→ Validate filenames
+→ Detect collection conflicts
+→ Build preview
+→ Build manifest
 ```
 
 The engine knows the rule contract, not individual rule implementations. New rule handlers can be registered without changing the engine.

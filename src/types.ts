@@ -28,6 +28,7 @@ export interface RenameContext {
   index: number;
   total: number;
   now: Date;
+  locale: string;
 }
 
 export type RuleType =
@@ -66,8 +67,12 @@ export interface RuleHandler<TConfig = unknown> {
 export type IssueCode =
   | "UNKNOWN_RULE"
   | "INVALID_RULE_CONFIG"
+  | "INVALID_INPUT"
+  | "DUPLICATE_INPUT_ID"
+  | "INVALID_OPTIONS"
   | "DUPLICATE_OUTPUT"
   | "CASE_COLLISION"
+  | "UNICODE_COLLISION"
   | "EMPTY_BASENAME"
   | "INVALID_CHARACTER"
   | "INVALID_EXTENSION"
@@ -114,6 +119,7 @@ export interface RenameOptions {
   conflictStrategy?: "error" | "warn";
   unchangedStrategy?: "keep" | "warn";
   extensionPolicy?: "preserve" | "allow-change";
+  unicodeNormalization?: "none" | "NFC" | "NFD";
   maxNameLength?: number;
   locale?: string;
   now?: Date;

@@ -11,7 +11,7 @@ import type {
   RenameResult,
   RenameState,
 } from "../types.js";
-import { validateState } from "../validation/index.js";
+import { validateInputs, validateOptions, validateState } from "../validation/index.js";
 
 const DEFAULT_OPTIONS: Omit<Required<RenameOptions>, "now"> = {
   caseSensitivity: "insensitive",
@@ -20,6 +20,7 @@ const DEFAULT_OPTIONS: Omit<Required<RenameOptions>, "now"> = {
   extensionPolicy: "preserve",
   maxNameLength: 255,
   locale: "en",
+  unicodeNormalization: "NFC",
 };
 
 export class RenameEngine {
@@ -30,12 +31,18 @@ export class RenameEngine {
   }
 
   rename(request: RenameRequest): RenameResult {
+    const requestedNow = request.options?.now ? new Date(request.options.now) : new Date();
+    const nowIsValid = !Number.isNaN(requestedNow.getTime());
     const options: Required<RenameOptions> = {
       ...DEFAULT_OPTIONS,
       ...request.options,
-      now: request.options?.now ? new Date(request.options.now) : new Date(),
+      now: nowIsValid ? requestedNow : new Date(0),
     };
 
+    const requestIssues: RenameIssue[] = [
+      ...validateOptions(options, nowIsValid),
+      ...validateInputs(request.files),
+    ];
     const ruleIssues: RenameIssue[] = [];
     for (const rule of request.rules) {
       if (!rule.enabled) continue;
@@ -48,12 +55,13 @@ export class RenameEngine {
       for (const issue of validation.issues) ruleIssues.push({ ...issue, ruleId: rule.id });
     }
 
-    if (ruleIssues.some((issue) => issue.severity === "error")) {
+    const earlyIssues = [...requestIssues, ...ruleIssues];
+    if (earlyIssues.some((issue) => issue.severity === "error")) {
       return {
         preview: { items: [], valid: false },
         manifest: { version: 1, createdAt: options.now.toISOString(), entries: [] },
         valid: false,
-        issues: ruleIssues,
+        issues: earlyIssues,
       };
     }
 
@@ -81,7 +89,7 @@ export class RenameEngine {
         const handler = this.#registry.get(rule);
         if (!handler) continue;
         if (options.extensionPolicy === "preserve" && rule.type === "extension") continue;
-        state = handler.apply(state, rule.config, { index, total: states.length, now: options.now });
+        state = handler.apply(state, rule.config, { index, total: states.length, now: options.now, locale: options.locale });
       }
       const changed = composeFilename(state.current) !== state.originalName;
       state = { ...state, changed };
@@ -108,7 +116,7 @@ export class RenameEngine {
       }
     }
 
-    const issues = [...ruleIssues, ...items.flatMap((item) => item.issues.filter((issue) => !conflictIssues.includes(issue))), ...conflictIssues];
+    const issues = [...earlyIssues, ...items.flatMap((item) => item.issues.filter((issue) => !conflictIssues.includes(issue))), ...conflictIssues];
     const valid = !issues.some((issue) => issue.severity === "error");
     const preview = { items, valid };
 
