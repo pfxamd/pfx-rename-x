@@ -9,7 +9,8 @@ interface RenameAppState {
   appendFiles(files: AppFile[]): void;
   removeFile(id: string): void;
   clearFiles(): void;
-  setRules(rules: RenameRule[]): void;\n  addRule(rule: RenameRule): void;
+  setRules(rules: RenameRule[]): void;
+  addRule(rule: RenameRule): void;
   replaceRule(rule: RenameRule): void;
   removeRule(id: string): void;
   toggleRule(id: string): void;
@@ -34,7 +35,9 @@ export const useRenameStore = create<RenameAppState>((set) => ({
 
   clearFiles: () => set({ files: [] }),
 
-  setRules: (rules) => set({ rules }),\n\n  addRule: (rule) =>
+  setRules: (rules) => set({ rules }),
+
+  addRule: (rule) =>
     set((state) => ({
       rules: [...state.rules, rule],
     })),
