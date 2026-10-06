@@ -1,0 +1,21 @@
+.zone {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding: 1.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.zone[data-dragging] {
+  border-style: solid;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

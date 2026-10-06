@@ -23,7 +23,11 @@
     "check": "npm run build && npm run typecheck && npm run test && npm run package:audit",
     "prepack": "npm run build",
     "prepublishOnly": "npm run check",
-    "package:audit": "node scripts/package-audit.mjs"
+    "package:audit": "node scripts/package-audit.mjs",
+    "app:dev": "npm --prefix app run dev",
+    "app:build": "npm --prefix app run build",
+    "app:test": "npm --prefix app run test",
+    "app:check": "npm --prefix app run check"
   },
   "engines": {
     "node": ">=20"
