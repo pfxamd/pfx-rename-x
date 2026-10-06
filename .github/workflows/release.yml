@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: startsWith(github.event.head_commit.message, 'release: publish v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install --no-audit --no-fund
+      - run: npm run check
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v$VERSION"
+          EXPECTED_MESSAGE="release: publish $TAG"
+
+          if [ "${{ github.event.head_commit.message }}" != "$EXPECTED_MESSAGE" ]; then
+            echo "Release commit message must be: $EXPECTED_MESSAGE"
+            exit 1
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "$TAG already exists"
+            exit 0
+          fi
+
+          awk '
+            /^## '"$VERSION"'( |$)/ { capture=1; next }
+            /^## / && capture { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+
+          gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --title "PFx Rename X $TAG" \
+            --notes-file release-notes.md
