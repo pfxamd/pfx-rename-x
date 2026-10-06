@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { ExecutionPanel } from "../features/execution/ExecutionPanel.js";
 import { FileDropZone } from "../features/files/FileDropZone.js";
 import { buildPreview } from "../features/preview/previewAdapter.js";
-import { RuleBuilder } from "../features/rules/RuleBuilder.js";
+import { QuickRenamePanel } from "../features/rules/QuickRenamePanel.js";
 import { useRenameStore } from "../store/renameStore.js";
 import styles from "./App.module.css";
 
@@ -38,13 +38,16 @@ export function App() {
           <span className={styles.brandMark} aria-hidden="true">RX</span>
           <div className={styles.brandCopy}>
             <h1>PFx Rename X</h1>
-            <span>Local batch renamer</span>
+            <span>Rename files locally</span>
           </div>
         </div>
 
-        <div className={styles.session}>
+        <div
+          className={styles.session}
+          aria-label={`Preview summary: ${files.length} files, ${changedCount} changed, ${result.issues.length} issues`}
+        >
           <span><b>{files.length}</b> files</span>
-          <span><b>{rules.length}</b> rules</span>
+          <span><b>{changedCount}</b> changed</span>
           <span data-state={result.issues.length > 0 ? "issue" : "ready"}>
             <b>{result.issues.length}</b> issues
           </span>
@@ -84,7 +87,7 @@ export function App() {
               <div className={styles.fileEmpty}>
                 <span className={styles.fileEmptyGlyph}>↳</span>
                 <strong>No files loaded</strong>
-                <span>Drop a batch here to begin.</span>
+                <span>Add files to start renaming.</span>
               </div>
             ) : (
               files.map((item, index) => (
@@ -108,36 +111,19 @@ export function App() {
           </div>
         </section>
 
-        <section className={styles.rulesPane} aria-label="Rename rules">
-          <div className={styles.panelHeaderStatic}>
-            <div>
-              <span className={styles.panelKicker}>Pipeline</span>
-              <h2>Rename rules</h2>
-            </div>
-            <span className={styles.panelCount}>{rules.length}</span>
+        <section className={styles.mainPane} aria-label="Rename workspace">
+          <div className={styles.settingsArea}>
+            <QuickRenamePanel />
           </div>
 
-          <div className={styles.rulesBody}>
-            <RuleBuilder />
-          </div>
-        </section>
-
-        <section className={styles.previewPane} aria-labelledby="preview-title">
           <div className={styles.previewHeader}>
             <div>
-              <span className={styles.panelKicker}>Result</span>
-              <h2 id="preview-title">Live preview</h2>
+              <span className={styles.panelKicker}>Preview</span>
+              <h2>Before → After</h2>
             </div>
-
-            <div
-              className={styles.previewStats}
-              aria-label={`Preview summary: ${files.length} files, ${changedCount} changed, ${result.issues.length} issues`}
-            >
+            <div className={styles.previewStats}>
               <span><b>{readyCount}</b> ready</span>
               <span><b>{changedCount}</b> changed</span>
-              <span data-state={result.issues.length > 0 ? "issue" : "ready"}>
-                <b>{result.issues.length}</b> issues
-              </span>
             </div>
           </div>
 
@@ -148,9 +134,6 @@ export function App() {
                   <b>{issue.code}</b> {issue.message}
                 </span>
               ))}
-              {result.issues.length > 3 ? (
-                <span>+{result.issues.length - 3} more</span>
-              ) : null}
             </div>
           ) : null}
 
@@ -158,15 +141,15 @@ export function App() {
             {files.length === 0 ? (
               <div className={styles.previewEmpty}>
                 <div className={styles.previewEmptyMark}>A → B</div>
-                <strong>Preview waits for files</strong>
-                <span>Add files on the left, then build the rename pipeline.</span>
+                <strong>Your new filenames will appear here</strong>
+                <span>Add files on the left, then type a new name above.</span>
               </div>
             ) : (
               <table className={styles.previewTable}>
                 <thead>
                   <tr>
                     <th>Original</th>
-                    <th>Renamed</th>
+                    <th>New name</th>
                     <th>Status</th>
                   </tr>
                 </thead>

@@ -1,0 +1,188 @@
+.panel {
+  width: min(680px, 100%);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.16);
+}
+
+.heading {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 11px 8px 13px;
+  border-bottom: 1px solid var(--line);
+}
+
+.heading h2,
+.heading p {
+  margin: 0;
+}
+
+.heading h2 {
+  color: var(--text);
+  font-size: 0.77rem;
+  font-weight: 680;
+}
+
+.heading p {
+  margin-top: 2px;
+  color: var(--text-faint);
+  font-size: 0.56rem;
+}
+
+.reset {
+  min-height: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 0.56rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 3px;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-0);
+}
+
+.tabs button,
+.segmented button,
+.caseChoices button {
+  min-height: 28px;
+  height: 28px;
+  padding: 0 10px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.59rem;
+}
+
+.tabs button[data-active],
+.segmented button[data-active],
+.caseChoices button[data-active] {
+  border-color: var(--line-strong);
+  background: var(--panel-3);
+  color: var(--text);
+}
+
+.controls {
+  min-height: 78px;
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  padding: 10px 11px 11px;
+}
+
+.mainField,
+.twoFields label,
+.inlineFields label {
+  display: grid;
+  gap: 4px;
+}
+
+.mainField {
+  flex: 1;
+  min-width: 220px;
+}
+
+.mainField span,
+.twoFields span,
+.inlineFields span {
+  color: var(--text-faint);
+  font-size: 0.53rem;
+  font-weight: 600;
+}
+
+.mainField input,
+.twoFields input,
+.inlineFields input,
+.inlineFields select {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  outline: none;
+  background: var(--panel-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.63rem;
+}
+
+.mainField input {
+  min-width: 240px;
+}
+
+.mainField input:focus,
+.twoFields input:focus,
+.inlineFields input:focus,
+.inlineFields select:focus {
+  border-color: rgba(116, 139, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(116, 139, 255, 0.08);
+}
+
+.toggle {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel-2);
+  color: var(--text-dim);
+  font-size: 0.58rem;
+  white-space: nowrap;
+}
+
+.toggle input {
+  accent-color: var(--accent);
+}
+
+.inlineFields {
+  display: flex;
+  gap: 7px;
+}
+
+.inlineFields input,
+.inlineFields select {
+  width: 66px;
+}
+
+.twoFields {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.segmented,
+.caseChoices {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mainField,
+  .mainField input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .twoFields {
+    grid-template-columns: 1fr;
+  }
+}
