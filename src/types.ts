@@ -42,6 +42,12 @@ export type RuleType =
   | "extension"
   | "trim"
   | "sanitize"
+  | "regex-replace"
+  | "slugify"
+  | "insert"
+  | "character-filter"
+  | "number-range"
+  | "template"
   | (string & {});
 
 export interface RenameRule<TConfig = unknown> {
@@ -57,10 +63,15 @@ export interface RuleValidationResult {
   issues: RenameIssue[];
 }
 
+export interface RulePreflightContext {
+  total: number;
+}
+
 export interface RuleHandler<TConfig = unknown> {
   type: RuleType;
   version: number;
   validate(config: TConfig): RuleValidationResult;
+  validateRequest?(config: TConfig, context: RulePreflightContext): RuleValidationResult;
   apply(state: RenameState, config: TConfig, context: RenameContext): RenameState;
 }
 

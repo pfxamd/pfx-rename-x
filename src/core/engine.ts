@@ -53,6 +53,10 @@ export class RenameEngine {
       }
       const validation = handler.validate(rule.config);
       for (const issue of validation.issues) ruleIssues.push({ ...issue, ruleId: rule.id });
+      const requestValidation = handler.validateRequest?.(rule.config, { total: request.files.length });
+      if (requestValidation) {
+        for (const issue of requestValidation.issues) ruleIssues.push({ ...issue, ruleId: rule.id });
+      }
     }
 
     const earlyIssues = [...requestIssues, ...ruleIssues];

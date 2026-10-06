@@ -2,7 +2,7 @@
 
 PFx Rename X is an open-source, UI-independent batch file renaming engine for deterministic rule pipelines, previews, validation, conflict detection, and rename manifests.
 
-## v0.1 scope
+## v0.2 scope
 
 The repository contains the core engine only. It does not read, write, rename, ZIP, or upload real files. Filesystem adapters and user interfaces belong in higher layers.
 
@@ -84,6 +84,20 @@ const result = rename({
 - Extension
 - Trim
 - Sanitize
+- Regex Replace
+- Slugify
+- Insert
+- Character Filter
+- Number Range
+- Template
+
+### v0.2 rule notes
+
+- `regexReplace()` supports native JavaScript regular-expression capture replacement.
+- `slugify()` is Unicode-aware and keeps non-Latin letters by default.
+- `insert()` uses Unicode code-point positions.
+- `numberRange()` validates that the configured range can cover the whole batch before execution.
+- `template()` supports `{name}`, `{original}`, `{index}`, `{index0}`, and `{total}`.
 
 ## Architecture
 

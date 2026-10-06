@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.2.0 - 2026-10-06
+
+- Added Regex Replace, Slugify, Insert, Character Filter, Number Range, and Template rules.
+- Added collection-aware rule preflight validation for bounded batch rules.
 - Froze the root public API with explicit exports and contract tests.
 - Added type-checking for tests and public consumer contracts to CI.
 - Hardened request and option validation.
@@ -11,7 +15,7 @@
 - Treat replacement strings literally in find/replace and sanitize rules.
 - Prevent manifests from being emitted for warning-level output conflicts.
 - Added portable trailing-dot/space validation and Unicode-aware length checks.
-- Added an extended edge-case and 10,000-file test suite.
+- Added extended edge-case, public API, v0.2 rule, and 10,000-file test coverage.
 
 ## 0.1.0
 

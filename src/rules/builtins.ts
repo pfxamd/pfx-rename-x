@@ -7,6 +7,7 @@ import type {
   RuleValidationResult,
 } from "../types.js";
 import { PfxRuleRegistry } from "./registry.js";
+import { registerV02Rules } from "./v02.js";
 
 function ok(): RuleValidationResult {
   return { valid: true, issues: [] };
@@ -239,7 +240,7 @@ const sanitizeHandler: RuleHandler<SanitizeConfig> = {
 };
 
 export function createBuiltinRegistry(): PfxRuleRegistry {
-  return new PfxRuleRegistry()
+  const registry = new PfxRuleRegistry()
     .register(prefixHandler)
     .register(suffixHandler)
     .register(findReplaceHandler)
@@ -250,4 +251,6 @@ export function createBuiltinRegistry(): PfxRuleRegistry {
     .register(extensionHandler)
     .register(trimHandler)
     .register(sanitizeHandler);
+
+  return registerV02Rules(registry);
 }

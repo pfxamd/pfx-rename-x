@@ -14,6 +14,14 @@ export {
   trim,
   sanitize,
 } from "./rules/builtins.js";
+export {
+  regexReplace,
+  slugify,
+  insert,
+  characterFilter,
+  numberRange,
+  template,
+} from "./rules/v02.js";
 
 export type {
   CaseConfig,
@@ -27,6 +35,14 @@ export type {
   SuffixConfig,
   TrimConfig,
 } from "./rules/builtins.js";
+export type {
+  CharacterFilterConfig,
+  InsertConfig,
+  NumberRangeConfig,
+  RegexReplaceConfig,
+  SlugifyConfig,
+  TemplateConfig,
+} from "./rules/v02.js";
 
 export type {
   FilenameParts,
@@ -44,6 +60,7 @@ export type {
   RenameRule,
   RenameState,
   RuleHandler,
+  RulePreflightContext,
   RuleType,
   RuleValidationResult,
 } from "./types.js";
