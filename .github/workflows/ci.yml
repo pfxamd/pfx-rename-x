@@ -23,3 +23,18 @@ jobs:
       - run: npm run check
       - run: npm install --prefix app --no-audit --no-fund
       - run: npm run app:check
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: npm install --prefix app --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+        working-directory: app
+      - run: npm run e2e
+        working-directory: app
