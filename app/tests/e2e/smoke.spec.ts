@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { strFromU8, unzipSync } from "fflate";
 
 test("renames real browser files and downloads a verified ZIP", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
 
   await expect(page.getByRole("heading", { name: "PFx Rename X" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Download ZIP" })).toBeDisabled();

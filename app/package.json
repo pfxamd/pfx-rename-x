@@ -12,7 +12,8 @@
     "check": "npm run typecheck && npm run test && npm run build",
     "preview": "vite preview",
     "e2e": "playwright test",
-    "build:pages": "tsc -p tsconfig.json && vite build --mode pages"
+    "build:pages": "tsc -p tsconfig.json && vite build --mode pages",
+    "e2e:pages": "playwright test --config playwright.pages.config.ts"
   },
   "dependencies": {
     "@pfxamd/rename-x": "file:..",
