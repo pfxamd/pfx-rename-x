@@ -2,14 +2,15 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   release:
-    if: ${{ startsWith(github.event.head_commit.message, 'release: publish v') }}
+    if: "${{ startsWith(github.event.head_commit.message, 'release') }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,8 +24,8 @@ jobs:
 
       - name: Publish GitHub Release
         env:
-          GH_TOKEN: ${{ github.token }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          GH_TOKEN: "${{ github.token }}"
+          COMMIT_MESSAGE: "${{ github.event.head_commit.message }}"
         shell: bash
         run: |
           VERSION="$(node -p "require('./package.json').version")"
