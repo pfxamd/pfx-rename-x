@@ -3,10 +3,11 @@ import { expect, test } from "@playwright/test";
 import { strFromU8, unzipSync } from "fflate";
 
 test("renames real browser files with the simple rename flow", async ({ page }) => {
-  await page.addInitScript(() => {
+  await page.goto("./");
+  await page.evaluate(() => {
     localStorage.setItem("pfx-rename-x-theme", "dark");
   });
-  await page.goto("./");
+  await page.reload();
 
   await expect(page.getByRole("heading", { name: "PFx Rename X" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
