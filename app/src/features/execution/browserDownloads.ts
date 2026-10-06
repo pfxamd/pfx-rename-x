@@ -11,6 +11,16 @@ function triggerDownload(url: string, filename: string): void {
   anchor.remove();
 }
 
+export function downloadBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+
+  try {
+    triggerDownload(url, filename);
+  } finally {
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+}
+
 export function downloadExecutionPlan(plan: ExecutionPlan): ExecutionSummary {
   if (!plan.ready) {
     throw new Error("Execution plan is not ready.");
@@ -40,11 +50,6 @@ export function downloadManifest(manifest: RenameManifest): void {
     [JSON.stringify(manifest, null, 2)],
     { type: "application/json;charset=utf-8" },
   );
-  const url = URL.createObjectURL(blob);
 
-  try {
-    triggerDownload(url, "pfx-rename-x-manifest.json");
-  } finally {
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-  }
+  downloadBlob(blob, "pfx-rename-x-manifest.json");
 }

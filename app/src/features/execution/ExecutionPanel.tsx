@@ -1,8 +1,13 @@
 import { useMemo, useState } from "react";
 import type { RenameResult } from "@pfxamd/rename-x";
 import type { AppFile } from "../files/types.js";
-import { downloadExecutionPlan, downloadManifest } from "./browserDownloads.js";
+import {
+  downloadBlob,
+  downloadExecutionPlan,
+  downloadManifest,
+} from "./browserDownloads.js";
 import { buildExecutionPlan } from "./executionPlan.js";
+import { createZipArchive } from "./zipArchive.js";
 import styles from "./ExecutionPanel.module.css";
 
 interface ExecutionPanelProps {
@@ -12,12 +17,14 @@ interface ExecutionPanelProps {
 
 type Status =
   | { kind: "idle" }
+  | { kind: "working"; message: string }
   | { kind: "success"; message: string }
   | { kind: "error"; message: string };
 
 export function ExecutionPanel({ files, result }: ExecutionPanelProps) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const plan = useMemo(() => buildExecutionPlan(files, result), [files, result]);
+  const working = status.kind === "working";
 
   const downloadFiles = () => {
     try {
@@ -30,6 +37,36 @@ export function ExecutionPanel({ files, result }: ExecutionPanelProps) {
       setStatus({
         kind: "error",
         message: error instanceof Error ? error.message : "Download failed.",
+      });
+    }
+  };
+
+  const downloadZip = async () => {
+    try {
+      setStatus({ kind: "working", message: "Preparing ZIP archive…" });
+
+      const step = Math.max(1, Math.ceil(plan.items.length / 100));
+      const blob = await createZipArchive(plan, result.manifest, (progress) => {
+        if (
+          progress.completed === progress.total ||
+          progress.completed % step === 0
+        ) {
+          setStatus({
+            kind: "working",
+            message: `Preparing ZIP ${progress.completed}/${progress.total} · ${progress.currentName}`,
+          });
+        }
+      });
+
+      downloadBlob(blob, "pfx-rename-x-renamed.zip");
+      setStatus({
+        kind: "success",
+        message: `ZIP ready with ${plan.items.length} renamed file${plan.items.length === 1 ? "" : "s"} and the manifest.`,
+      });
+    } catch (error) {
+      setStatus({
+        kind: "error",
+        message: error instanceof Error ? error.message : "ZIP creation failed.",
       });
     }
   };
@@ -47,17 +84,24 @@ export function ExecutionPanel({ files, result }: ExecutionPanelProps) {
         <div className={styles.actions}>
           <button
             type="button"
-            disabled={result.manifest.entries.length === 0}
+            disabled={working || result.manifest.entries.length === 0}
             onClick={() => downloadManifest(result.manifest)}
           >
             Export manifest
           </button>
           <button
             type="button"
-            disabled={!plan.ready}
+            disabled={working || !plan.ready}
+            onClick={() => void downloadZip()}
+          >
+            Download ZIP
+          </button>
+          <button
+            type="button"
+            disabled={working || !plan.ready}
             onClick={downloadFiles}
           >
-            Download renamed copies
+            Download separately
           </button>
         </div>
       </div>
@@ -85,7 +129,7 @@ export function ExecutionPanel({ files, result }: ExecutionPanelProps) {
 
       {plan.items.length > 1 ? (
         <p className={styles.note}>
-          Your browser may ask permission before allowing multiple downloads.
+          ZIP is the preferred batch download. Separate downloads remain available as a fallback.
         </p>
       ) : null}
     </section>
