@@ -39,6 +39,21 @@
   margin-top: 1.5rem;
 }
 
+.issues {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.issues p {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
 .tableWrap {
   margin-top: 1rem;
   overflow-x: auto;

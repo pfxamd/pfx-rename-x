@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { FileDropZone } from "../features/files/FileDropZone.js";
 import { buildPreview } from "../features/preview/previewAdapter.js";
+import { RuleBuilder } from "../features/rules/RuleBuilder.js";
 import { useRenameStore } from "../store/renameStore.js";
 import styles from "./App.module.css";
 
@@ -29,21 +30,33 @@ export function App() {
 
       <FileDropZone onFiles={appendFiles} />
 
+      <RuleBuilder />
+
       <section className={styles.section} aria-labelledby="files-heading">
         <div className={styles.sectionHeader}>
           <div>
-            <h2 id="files-heading">Files</h2>
-            <p>{files.length} selected</p>
+            <h2 id="files-heading">Preview</h2>
+            <p>{files.length} files · {result.issues.length} issues</p>
           </div>
           {files.length > 0 ? (
             <button type="button" onClick={clearFiles}>
-              Clear
+              Clear files
             </button>
           ) : null}
         </div>
 
+        {result.issues.length > 0 ? (
+          <div className={styles.issues} role="status">
+            {result.issues.map((issue, index) => (
+              <p key={`${issue.code}-${issue.ruleId ?? ""}-${index}`}>
+                <strong>{issue.code}</strong> {issue.message}
+              </p>
+            ))}
+          </div>
+        ) : null}
+
         {files.length === 0 ? (
-          <p className={styles.empty}>No files selected.</p>
+          <p className={styles.empty}>Add files to see the live preview.</p>
         ) : (
           <div className={styles.tableWrap}>
             <table>
