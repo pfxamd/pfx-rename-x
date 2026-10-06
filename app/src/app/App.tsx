@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExecutionPanel } from "../features/execution/ExecutionPanel.js";
 import { FileDropZone } from "../features/files/FileDropZone.js";
 import { buildPreview } from "../features/preview/previewAdapter.js";
 import { QuickRenamePanel } from "../features/rules/QuickRenamePanel.js";
 import { useRenameStore } from "../store/renameStore.js";
+import { applyTheme, getInitialTheme, type AppTheme } from "./theme.js";
 import styles from "./App.module.css";
 
 function formatBytes(bytes: number | undefined): string {
@@ -15,12 +16,17 @@ function formatBytes(bytes: number | undefined): string {
 }
 
 export function App() {
+  const [theme, setTheme] = useState<AppTheme>(getInitialTheme);
   const files = useRenameStore((state) => state.files);
   const rules = useRenameStore((state) => state.rules);
   const options = useRenameStore((state) => state.options);
   const appendFiles = useRenameStore((state) => state.appendFiles);
   const removeFile = useRenameStore((state) => state.removeFile);
   const clearFiles = useRenameStore((state) => state.clearFiles);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   const result = useMemo(
     () => buildPreview(files, rules, options),
@@ -30,6 +36,7 @@ export function App() {
   const readyCount = result.preview.items.filter((item) => item.valid).length;
   const changedCount = result.manifest.entries.length;
   const totalSize = files.reduce((sum, item) => sum + (item.input.size ?? 0), 0);
+  const nextTheme: AppTheme = theme === "dark" ? "light" : "dark";
 
   return (
     <main className={styles.app}>
@@ -54,8 +61,20 @@ export function App() {
         </div>
 
         <div className={styles.runtime}>
-          <span className={styles.runtimeDot} />
-          Browser only
+          <button
+            type="button"
+            className={styles.themeToggle}
+            aria-label={`Switch to ${nextTheme} mode`}
+            title={`Switch to ${nextTheme} mode`}
+            onClick={() => setTheme(nextTheme)}
+          >
+            <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
+            {nextTheme === "light" ? "Light" : "Dark"}
+          </button>
+          <span className={styles.runtimeStatus}>
+            <span className={styles.runtimeDot} />
+            Browser only
+          </span>
         </div>
       </header>
 

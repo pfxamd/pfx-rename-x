@@ -2,28 +2,67 @@
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  color: #eef0f4;
-  background: #0b0c0f;
+  color: var(--text);
+  background: var(--app-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --app-bg: #0b0c0f;
-  --chrome: #0f1115;
-  --panel-0: #0d0f12;
-  --panel: #111318;
-  --panel-2: #15181e;
-  --panel-3: #191d24;
-  --hover: rgba(255, 255, 255, 0.026);
-  --text: #eef0f4;
-  --text-dim: #949aa5;
-  --text-faint: #646b76;
-  --accent: #748bff;
-  --success: #67d39e;
-  --danger: #ff7070;
-  --line: #232730;
-  --line-soft: #191d24;
-  --line-strong: #343946;
+  --app-bg: #0b0d10;
+  --chrome: #101217;
+  --panel-0: #0e1014;
+  --panel: #12151a;
+  --panel-2: #161a20;
+  --panel-3: #1b2028;
+  --hover: rgba(255, 255, 255, 0.035);
+  --text: #f1f3f7;
+  --text-dim: #a0a6b1;
+  --text-faint: #6f7682;
+  --accent: #7c8fff;
+  --accent-strong: #93a2ff;
+  --accent-soft: rgba(124, 143, 255, 0.12);
+  --accent-glow: rgba(124, 143, 255, 0.05);
+  --success: #63d49c;
+  --danger: #ff7279;
+  --danger-soft: rgba(255, 114, 121, 0.045);
+  --danger-line: rgba(255, 114, 121, 0.18);
+  --line: #252a33;
+  --line-soft: #1b1f26;
+  --line-strong: #363d49;
+  --shadow-panel: 0 12px 34px rgba(0, 0, 0, 0.18);
+  --focus-ring: rgba(124, 143, 255, 0.72);
+  --selection: rgba(124, 143, 255, 0.26);
+  --scrollbar: #333a46;
+  --primary-text: #0a0c10;
+}
+
+:root[data-theme="light"] {
+  --app-bg: #f5f7fa;
+  --chrome: #ffffff;
+  --panel-0: #f7f8fb;
+  --panel: #ffffff;
+  --panel-2: #f3f5f8;
+  --panel-3: #eaedf2;
+  --hover: rgba(25, 31, 43, 0.035);
+  --text: #171b23;
+  --text-dim: #596171;
+  --text-faint: #87909f;
+  --accent: #5368e8;
+  --accent-strong: #4358d6;
+  --accent-soft: rgba(83, 104, 232, 0.1);
+  --accent-glow: rgba(83, 104, 232, 0.045);
+  --success: #1f875d;
+  --danger: #d94d59;
+  --danger-soft: rgba(217, 77, 89, 0.04);
+  --danger-line: rgba(217, 77, 89, 0.16);
+  --line: #dde2e9;
+  --line-soft: #ebedf1;
+  --line-strong: #c8ced8;
+  --shadow-panel: 0 10px 28px rgba(30, 39, 55, 0.08);
+  --focus-ring: rgba(83, 104, 232, 0.58);
+  --selection: rgba(83, 104, 232, 0.18);
+  --scrollbar: #c3c9d2;
+  --primary-text: #ffffff;
 }
 
 * {
@@ -41,6 +80,10 @@ body {
   min-height: 100vh;
   overflow: hidden;
   background: var(--app-bg);
+  color: var(--text);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
 button,
@@ -59,7 +102,8 @@ button {
   transition:
     background 100ms ease,
     border-color 100ms ease,
-    color 100ms ease;
+    color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 button:hover:not(:disabled) {
@@ -70,18 +114,23 @@ button:hover:not(:disabled) {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid rgba(116, 139, 255, 0.72);
-  outline-offset: 1px;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+input::placeholder {
+  color: var(--text-faint);
+  opacity: 0.78;
 }
 
 ::selection {
-  background: rgba(116, 139, 255, 0.26);
-  color: #fff;
+  background: var(--selection);
+  color: var(--text);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #303641 transparent;
+  scrollbar-color: var(--scrollbar) transparent;
 }
 
 @media (max-width: 980px) {

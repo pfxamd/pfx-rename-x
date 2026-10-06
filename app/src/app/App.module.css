@@ -8,7 +8,7 @@
 .topbar {
   height: 52px;
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) auto minmax(150px, 1fr);
+  grid-template-columns: minmax(240px, 1fr) auto minmax(220px, 1fr);
   align-items: center;
   gap: 20px;
   padding: 0 16px;
@@ -36,6 +36,7 @@
   font-family: var(--font-mono);
   font-size: 0.64rem;
   font-weight: 800;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .brandCopy h1,
@@ -48,6 +49,7 @@
 .brandCopy h1 {
   font-size: 0.84rem;
   font-weight: 690;
+  letter-spacing: -0.015em;
 }
 
 .brandCopy span {
@@ -98,11 +100,18 @@
 
 .runtime {
   justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.runtimeStatus {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   color: var(--text-dim);
   font-size: 0.63rem;
+  white-space: nowrap;
 }
 
 .runtimeDot {
@@ -110,6 +119,30 @@
   height: 6px;
   border-radius: 50%;
   background: var(--success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 12%, transparent);
+}
+
+.themeToggle {
+  min-height: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border-color: var(--line);
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 0.59rem;
+}
+
+.themeToggle:hover {
+  color: var(--text);
+}
+
+.themeToggle span {
+  color: var(--accent);
+  font-size: 0.72rem;
+  line-height: 1;
 }
 
 .workbench {
@@ -179,6 +212,10 @@
   font-size: 0.62rem;
 }
 
+.ghostButton:hover {
+  color: var(--text);
+}
+
 .dropSlot {
   padding: 10px;
   border-bottom: 1px solid var(--line);
@@ -198,6 +235,7 @@
 .fileList {
   min-height: 0;
   overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 .fileRow {
@@ -208,6 +246,7 @@
   gap: 7px;
   padding: 4px 7px 4px 9px;
   border-bottom: 1px solid var(--line-soft);
+  transition: background-color 90ms ease;
 }
 
 .fileRow:hover {
@@ -229,7 +268,7 @@
   overflow: hidden;
   color: var(--text);
   font-size: 0.66rem;
-  font-weight: 530;
+  font-weight: 560;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -250,6 +289,10 @@
   border-color: transparent;
   background: transparent;
   color: var(--text-faint);
+}
+
+.removeFile:hover {
+  color: var(--danger);
 }
 
 .fileEmpty,
@@ -274,7 +317,7 @@
 .previewEmpty strong {
   color: var(--text-dim);
   font-size: 0.67rem;
-  font-weight: 550;
+  font-weight: 560;
 }
 
 .fileEmpty span,
@@ -289,7 +332,7 @@
   padding: 18px 20px 16px;
   border-bottom: 1px solid var(--line);
   background:
-    radial-gradient(circle at 0 0, rgba(116, 139, 255, 0.045), transparent 34%),
+    radial-gradient(circle at 0 0, var(--accent-glow), transparent 34%),
     var(--panel-0);
 }
 
@@ -322,8 +365,8 @@
   gap: 6px;
   overflow-x: auto;
   padding: 6px 8px;
-  border-bottom: 1px solid rgba(255, 110, 110, 0.16);
-  background: rgba(255, 110, 110, 0.03);
+  border-bottom: 1px solid var(--danger-line);
+  background: var(--danger-soft);
 }
 
 .issueStrip span {
@@ -340,6 +383,7 @@
 .previewTableRegion {
   min-height: 0;
   overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 .previewTable {
@@ -360,6 +404,8 @@
   color: var(--text-faint);
   font-family: var(--font-mono);
   font-size: 0.53rem;
+  font-weight: 650;
+  letter-spacing: 0.045em;
   text-align: left;
   text-transform: uppercase;
 }
@@ -377,6 +423,11 @@
   height: 38px;
   padding: 0 12px;
   border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+
+.previewTable tbody tr {
+  transition: background-color 90ms ease;
 }
 
 .previewTable tbody tr:hover {
@@ -400,6 +451,7 @@
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 0.63rem;
+  font-weight: 520;
 }
 
 .stateMark {
@@ -434,6 +486,10 @@
   }
 
   .session {
+    display: none;
+  }
+
+  .runtimeStatus {
     display: none;
   }
 

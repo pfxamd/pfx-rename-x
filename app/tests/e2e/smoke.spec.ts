@@ -3,9 +3,20 @@ import { expect, test } from "@playwright/test";
 import { strFromU8, unzipSync } from "fflate";
 
 test("renames real browser files with the simple rename flow", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("pfx-rename-x-theme", "dark");
+  });
   await page.goto("./");
 
   await expect(page.getByRole("heading", { name: "PFx Rename X" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Download ZIP" })).toBeDisabled();
 
   await page.locator('input[type="file"]').setInputFiles([

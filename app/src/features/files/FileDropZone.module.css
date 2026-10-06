@@ -3,8 +3,8 @@
 }
 
 .zone[data-dragging] .pick {
-  border-color: rgba(116, 139, 255, 0.62);
-  background: rgba(116, 139, 255, 0.08);
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .input {
@@ -30,7 +30,7 @@
 }
 
 .pick:hover {
-  border-color: rgba(116, 139, 255, 0.46);
+  border-color: var(--accent);
   background: var(--panel-3);
 }
 
@@ -44,6 +44,9 @@
   background: var(--panel);
   color: var(--accent);
   font-size: 0.9rem;
+  transition:
+    border-color 100ms ease,
+    background 100ms ease;
 }
 
 .pick > span:last-child {
@@ -58,7 +61,7 @@
 .pick strong {
   color: var(--text);
   font-size: 0.66rem;
-  font-weight: 590;
+  font-weight: 600;
 }
 
 .pick small {
