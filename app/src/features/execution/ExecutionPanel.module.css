@@ -1,9 +1,12 @@
 .panel {
-  margin-top: 1.5rem;
-  padding: 1rem;
+  margin-top: 10px;
+  padding: 14px;
   border: 1px solid var(--border);
-  border-radius: 0.85rem;
-  background: var(--surface);
+  border-radius: 16px;
+  background:
+    linear-gradient(145deg, rgba(142, 162, 255, 0.04), transparent 46%),
+    var(--surface);
+  box-shadow: var(--shadow-soft);
 }
 
 .heading,
@@ -15,7 +18,7 @@
 
 .heading {
   justify-content: space-between;
-  gap: 1rem;
+  gap: 14px;
 }
 
 .heading h2,
@@ -26,6 +29,12 @@
   margin: 0;
 }
 
+.heading h2 {
+  font-size: 0.92rem;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+}
+
 .heading p,
 .note,
 .summary {
@@ -33,47 +42,104 @@
 }
 
 .heading p {
-  margin-top: 0.25rem;
+  margin-top: 4px;
+  max-width: 420px;
+  font-size: 0.68rem;
+  line-height: 1.4;
 }
 
 .actions {
-  gap: 0.5rem;
+  justify-content: flex-end;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
+.actions button {
+  min-height: 32px;
+  padding-inline: 10px;
+  font-size: 0.68rem;
+}
+
+.actions button:nth-child(2) {
+  border-color: rgba(142, 162, 255, 0.42);
+  background: rgba(142, 162, 255, 0.12);
+  color: #dde3ff;
+}
+
+.actions button:nth-child(2):hover {
+  border-color: rgba(142, 162, 255, 0.64);
+  background: rgba(142, 162, 255, 0.17);
+}
+
 .summary {
-  gap: 1rem;
-  margin-top: 1rem;
-  font-size: 0.82rem;
+  gap: 12px;
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
 }
 
 .issues {
   display: grid;
-  gap: 0.4rem;
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--border);
+  gap: 5px;
+  margin-top: 9px;
+  padding: 9px;
+  border: 1px solid rgba(255, 116, 116, 0.12);
+  border-radius: 9px;
+  background: rgba(255, 116, 116, 0.035);
 }
 
 .issues p,
 .status,
 .note {
-  font-size: 0.82rem;
+  font-size: 0.68rem;
 }
 
-.status,
+.issues strong {
+  color: var(--danger);
+  font-family: var(--font-mono);
+}
+
+.status {
+  margin-top: 9px;
+  padding: 8px 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.status[data-kind="success"] {
+  border-color: rgba(91, 211, 155, 0.18);
+  color: var(--success);
+}
+
+.status[data-kind="error"] {
+  border-color: rgba(255, 116, 116, 0.18);
+  color: var(--danger);
+}
+
+.status[data-kind="working"] {
+  border-color: rgba(142, 162, 255, 0.18);
+  color: var(--accent);
+}
+
 .note {
-  margin-top: 0.75rem;
+  margin-top: 8px;
 }
 
 .actions button:disabled {
   cursor: default;
-  opacity: 0.35;
+  opacity: 0.3;
 }
 
 @media (max-width: 720px) {
   .heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .actions {
+    justify-content: flex-start;
   }
 }

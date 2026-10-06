@@ -21,7 +21,9 @@ test("renames real browser files and downloads a verified ZIP", async ({ page })
     },
   ]);
 
-  await expect(page.getByText("2 files · 0 issues")).toBeVisible();
+  await expect(
+    page.getByLabel("Preview summary: 2 files, 0 changed, 0 issues"),
+  ).toBeVisible();
 
   const ruleType = page.getByLabel("Rule type");
 

@@ -1,5 +1,5 @@
 .builder {
-  margin-top: 1.5rem;
+  margin-top: 12px;
 }
 
 .heading,
@@ -11,10 +11,16 @@
   align-items: center;
 }
 
-.heading,
+.heading {
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0 14px;
+  border-bottom: 1px solid var(--border);
+}
+
 .cardHeader {
   justify-content: space-between;
-  gap: 1rem;
+  gap: 12px;
 }
 
 .heading h2,
@@ -24,6 +30,12 @@
   margin: 0;
 }
 
+.heading h2 {
+  font-size: 1.06rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
 .heading p,
 .card p,
 .empty,
@@ -31,102 +43,186 @@
   color: var(--muted);
 }
 
-.heading p,
+.heading p {
+  margin-top: 4px;
+  font-size: 0.72rem;
+}
+
 .card p {
-  margin-top: 0.25rem;
+  margin-top: 3px;
+  font-size: 0.68rem;
+  line-height: 1.35;
 }
 
 .addRule,
 .actions {
-  gap: 0.5rem;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .addRule select,
 .field input,
 .field select {
-  color: inherit;
-  background: #15171a;
+  min-height: 34px;
+  padding: 0 10px;
   border: 1px solid var(--border);
-  border-radius: 0.55rem;
-  min-height: 2.35rem;
-  padding: 0.5rem 0.65rem;
+  border-radius: 9px;
+  outline: none;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.72rem;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+.addRule select:focus,
+.field input:focus,
+.field select:focus {
+  border-color: rgba(142, 162, 255, 0.52);
+  box-shadow: 0 0 0 3px rgba(142, 162, 255, 0.08);
+  background: var(--surface-3);
+}
+
+.addRule button {
+  min-height: 34px;
+  padding-inline: 12px;
+  border-color: rgba(142, 162, 255, 0.36);
+  background: rgba(142, 162, 255, 0.1);
+  color: #dce2ff;
+  font-size: 0.72rem;
+}
+
+.addRule button:hover {
+  border-color: rgba(142, 162, 255, 0.58);
+  background: rgba(142, 162, 255, 0.15);
 }
 
 .empty {
-  padding: 1rem 0;
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-size: 0.75rem;
 }
 
 .list {
   display: grid;
-  gap: 0.85rem;
-  margin-top: 1rem;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .card {
-  padding: 1rem;
+  padding: 12px;
   border: 1px solid var(--border);
-  border-radius: 0.85rem;
-  background: var(--surface);
+  border-radius: 12px;
+  background: var(--surface-2);
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  background: rgba(25, 28, 35, 0.94);
 }
 
 .card[data-disabled] {
-  opacity: 0.62;
+  opacity: 0.48;
 }
 
 .identity {
-  gap: 0.75rem;
+  gap: 10px;
   min-width: 0;
 }
 
 .order {
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
   flex: 0 0 auto;
   border: 1px solid var(--border);
-  border-radius: 0.55rem;
+  border-radius: 8px;
+  background: var(--surface-3);
+  color: var(--muted-2);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+}
+
+.card h3 {
+  font-size: 0.78rem;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.actions button {
+  min-height: 29px;
+  padding: 0 8px;
+  border-color: transparent;
+  background: transparent;
   color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.actions button:hover {
+  border-color: var(--border);
+  background: var(--surface-3);
+  color: var(--text);
 }
 
 .editor {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 9px;
   align-items: end;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .field {
   display: grid;
-  gap: 0.35rem;
+  gap: 5px;
+  min-width: 0;
 }
 
 .field span,
 .check span {
-  font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--muted-2);
+  font-size: 0.64rem;
+  font-weight: 540;
+  letter-spacing: 0.015em;
 }
 
 .check {
+  min-height: 34px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 2.35rem;
+  gap: 7px;
+}
+
+.check input {
+  accent-color: var(--accent);
 }
 
 .hint {
   grid-column: 1 / -1;
   margin: 0;
-  font-size: 0.78rem;
+  padding: 8px 9px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.012);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
 }
 
 .actions button:disabled {
   cursor: default;
-  opacity: 0.35;
+  opacity: 0.28;
 }
 
 @media (max-width: 720px) {
@@ -139,5 +235,9 @@
   .addRule {
     display: grid;
     grid-template-columns: 1fr auto;
+  }
+
+  .actions {
+    padding-left: 38px;
   }
 }

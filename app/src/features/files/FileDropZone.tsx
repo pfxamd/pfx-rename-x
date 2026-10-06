@@ -48,8 +48,16 @@ export function FileDropZone({ onFiles }: FileDropZoneProps) {
         multiple
         onChange={handleInput}
       />
-      <strong>Add files</strong>
-      <span>Drop files here or select them from your device.</span>
+
+      <div className={styles.icon} aria-hidden="true">
+        +
+      </div>
+
+      <div className={styles.copy}>
+        <strong>{dragging ? "Drop files to add them" : "Drop files here"}</strong>
+        <span>Any file type · multiple files supported</span>
+      </div>
+
       <button type="button" onClick={() => inputRef.current?.click()}>
         Choose files
       </button>
