@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { ExecutionPanel } from "../features/execution/ExecutionPanel.js";
 import { FileDropZone } from "../features/files/FileDropZone.js";
 import { buildPreview } from "../features/preview/previewAdapter.js";
 import { RuleBuilder } from "../features/rules/RuleBuilder.js";
@@ -86,6 +87,8 @@ export function App() {
           </div>
         )}
       </section>
+
+      <ExecutionPanel files={files} result={result} />
     </main>
   );
 }

@@ -1,0 +1,79 @@
+.panel {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+}
+
+.heading,
+.actions,
+.summary {
+  display: flex;
+  align-items: center;
+}
+
+.heading {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.heading h2,
+.heading p,
+.issues p,
+.status,
+.note {
+  margin: 0;
+}
+
+.heading p,
+.note,
+.summary {
+  color: var(--muted);
+}
+
+.heading p {
+  margin-top: 0.25rem;
+}
+
+.actions {
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.summary {
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+}
+
+.issues {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+.issues p,
+.status,
+.note {
+  font-size: 0.82rem;
+}
+
+.status,
+.note {
+  margin-top: 0.75rem;
+}
+
+.actions button:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+@media (max-width: 720px) {
+  .heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
