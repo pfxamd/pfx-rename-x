@@ -14,6 +14,7 @@ export {
   trim,
   sanitize,
 } from "./rules/builtins.js";
+
 export type {
   CaseConfig,
   CounterConfig,
@@ -26,4 +27,23 @@ export type {
   SuffixConfig,
   TrimConfig,
 } from "./rules/builtins.js";
-export type * from "./types.js";
+
+export type {
+  FilenameParts,
+  IssueCode,
+  RenameContext,
+  RenameInput,
+  RenameIssue,
+  RenameManifest,
+  RenameManifestEntry,
+  RenameOptions,
+  RenamePreview,
+  RenamePreviewItem,
+  RenameRequest,
+  RenameResult,
+  RenameRule,
+  RenameState,
+  RuleHandler,
+  RuleType,
+  RuleValidationResult,
+} from "./types.js";

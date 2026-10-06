@@ -24,6 +24,16 @@ npm run check
 
 Build output is generated in `dist/` and is intentionally not committed.
 
+## Public API contract
+
+Only imports from the package root are supported:
+
+```ts
+import { rename, prefix, type RenameRequest } from "@pfxamd/rename-x";
+```
+
+Internal file paths are not part of the public contract. Runtime exports and public TypeScript types are explicitly enumerated in `src/index.ts` and protected by API contract tests.
+
 ## Example
 
 ```ts

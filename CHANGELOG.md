@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Froze the root public API with explicit exports and contract tests.
+- Added type-checking for tests and public consumer contracts to CI.
 - Hardened request and option validation.
 - Reject path-like filenames and duplicate input IDs.
 - Added NFC/NFD Unicode collision detection.
