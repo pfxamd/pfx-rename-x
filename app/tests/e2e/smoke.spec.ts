@@ -41,7 +41,7 @@ test("keeps one simple flow for renaming and downloading a batch", async ({ page
   await expect(page.getByText("Files downloaded.")).toBeVisible();
 
   await page.getByRole("button", { name: "Remove Alpha Note.TXT" }).click();
-  await expect(page.getByText("Holiday.TXT")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Remove Alpha Note.TXT" })).toHaveCount(0);
   await expect(page.getByText("Holiday.txt")).toBeVisible();
   const single = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download file" }).click();
