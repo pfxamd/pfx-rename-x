@@ -128,7 +128,9 @@ test("keeps a selected but already-matching name in the downloaded set", async (
   await expect(page.getByText("Artwork 02.png")).toBeVisible();
   const started = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download files" }).click();
-  const archive = unzipSync(new Uint8Array(await readFile((await started).path()!)));
+  const selectedDownload = await started;
+  const selectedPath = await selectedDownload.path();
+  const archive = unzipSync(new Uint8Array(await readFile(selectedPath!)));
   expect(Object.keys(archive).sort()).toEqual(["Artwork 01.jpg", "Artwork 02.png"]);
   expect(strFromU8(archive["Artwork 01.jpg"]!)).toBe("original-first");
   expect(strFromU8(archive["Artwork 02.png"]!)).toBe("original-second");
