@@ -124,7 +124,7 @@ test("keeps a selected but already-matching name in the downloaded set", async (
     { name: "draft.png", mimeType: "image/png", buffer: Buffer.from("original-second") },
   ]);
   await page.getByLabel("New name").fill("Artwork");
-  await expect(page.getByText("Artwork 01.jpg")).toBeVisible();
+  await expect(page.getByText("Artwork 01.jpg").last()).toBeVisible();
   await expect(page.getByText("Artwork 02.png")).toBeVisible();
   const started = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download files" }).click();
@@ -160,4 +160,22 @@ test("keeps the core workflow usable on narrow screens in both themes", async ({
       await expect(page.getByRole("button", { name: "Download file" })).toBeVisible();
     }
   }
+});
+
+
+test("accepts a real browser drag-and-drop gesture", async ({ page }) => {
+  await page.goto("./");
+  await page.evaluate(() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(["dropped-file"], "sketch draft.svg", { type: "image/svg+xml" }));
+    const zone = document.querySelector('[aria-label="Add files"]');
+    if (!zone) throw new Error("Drop area missing");
+    for (const eventName of ["dragenter", "dragover", "drop"]) {
+      zone.dispatchEvent(new DragEvent(eventName, { bubbles: true, cancelable: true, dataTransfer: transfer }));
+    }
+  });
+  await expect(page.getByText("sketch draft.svg")).toBeVisible();
+  await page.getByLabel("New name").fill("Final");
+  await expect(page.getByText("Final.svg")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Download file" })).toBeEnabled();
 });
