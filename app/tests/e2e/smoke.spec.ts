@@ -77,7 +77,7 @@ test("renames 100 files including duplicate originals and keeps every byte", asy
   await page.locator('input[type="file"]').setInputFiles(batch);
   await expect(page.getByRole("heading", { name: "Files 100" })).toBeVisible();
   await page.getByLabel("New name").fill("Portfolio");
-  await expect(page.getByText("Portfolio 01.JPG")).toBeVisible();
+  await expect(page.getByText("Portfolio 001.JPG")).toBeVisible();
   await expect(page.getByText("Portfolio 100.txt")).toBeVisible();
   await expect(page.getByRole("button", { name: "Download files" })).toBeEnabled();
 
@@ -88,7 +88,7 @@ test("renames 100 files including duplicate originals and keeps every byte", asy
   const names = Object.keys(archive);
   expect(names).toHaveLength(100);
   expect(names).not.toContain("pfx-rename-x-manifest.json");
-  expect(strFromU8(archive["Portfolio 01.JPG"]!)).toBe("asset-000");
+  expect(strFromU8(archive["Portfolio 001.JPG"]!)).toBe("asset-000");
   expect(strFromU8(archive["Portfolio 100.txt"]!)).toBe("asset-099");
 });
 
@@ -178,4 +178,42 @@ test("accepts a real browser drag-and-drop gesture", async ({ page }) => {
   await page.getByLabel("New name").fill("Final");
   await expect(page.getByText("Final.svg")).toBeVisible();
   await expect(page.getByRole("button", { name: "Download file" })).toBeEnabled();
+});
+
+
+test("keeps the primary download action readable in both color themes", async ({ page }) => {
+  await page.goto("./");
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "artwork.jpg",
+    mimeType: "image/jpeg",
+    buffer: Buffer.from("image"),
+  });
+  await page.getByLabel("New name").fill("Finished");
+
+  const checkContrast = async () => {
+    const ratio = await page.getByRole("button", { name: "Download file" }).evaluate((button) => {
+      const styles = getComputedStyle(button);
+      const toLinear = (value: number) => {
+        const normalized = value / 255;
+        return normalized <= 0.04045
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      };
+      const luminance = (value: string) => {
+        const rgb = value.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? [0, 0, 0];
+        return rgb.reduce((sum, channel, i) => sum + toLinear(channel) * [0.2126, 0.7152, 0.0722][i]!, 0);
+      };
+      const front = luminance(styles.color);
+      const back = luminance(styles.backgroundColor);
+      return (Math.max(front, back) + 0.05) / (Math.min(front, back) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  };
+
+  await page.getByRole("button", { name: "Switch to light mode" }).count().then(async (count) => {
+    if (count) await page.getByRole("button", { name: "Switch to light mode" }).click();
+  });
+  await checkContrast();
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await checkContrast();
 });

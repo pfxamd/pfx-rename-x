@@ -34,6 +34,7 @@ export function App() {
       ...defaultQuickRenameSettings,
       name,
       numbering: files.length > 1,
+      digits: Math.max(2, String(files.length).length),
     }),
     [name, files.length],
   );

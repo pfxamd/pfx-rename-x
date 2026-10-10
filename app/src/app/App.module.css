@@ -253,8 +253,8 @@
   min-width: 185px;
   min-height: 49px;
   padding: 0 22px;
-  border: 1px solid var(--accent);
-  background: var(--accent);
+  border: 1px solid var(--action);
+  background: var(--action);
   color: #fff;
   border-radius: 11px;
   font-size: 14px;
@@ -265,7 +265,7 @@
   gap: 10px;
 }
 .downloadButton svg { width: 18px; height: 18px; }
-.downloadButton:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+.downloadButton:hover:not(:disabled) { background: var(--action-hover); border-color: var(--action-hover); }
 .downloadButton:disabled { opacity: .42; cursor: not-allowed; }
 .error { color: var(--danger); font-size: 13px; line-height: 1.5; margin: 16px 0 0; }
 .feedback { color: var(--success); font-size: 13px; text-align: right; margin: 12px 0 0; }

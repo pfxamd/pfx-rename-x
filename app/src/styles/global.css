@@ -19,6 +19,8 @@
   --accent: #e52f40;
   --accent-hover: #cf2234;
   --accent-glow: rgba(229,47,64,.13);
+  --action: #d7273b;
+  --action-hover: #bf1e33;
   --danger: #c62e3c;
   --danger-surface: #fff0f1;
   --success: #257d55;
@@ -39,6 +41,8 @@
   --accent: #f04454;
   --accent-hover: #d93044;
   --accent-glow: rgba(240,68,84,.17);
+  --action: #d72c40;
+  --action-hover: #bb2538;
   --danger: #ff7480;
   --danger-surface: #40252a;
   --success: #71d1a3;
