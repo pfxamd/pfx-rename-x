@@ -8,6 +8,7 @@ test("keeps one simple flow for renaming and downloading a batch", async ({ page
   await page.reload();
 
   await expect(page.getByRole("heading", { name: "PFx Rename X" })).toBeVisible();
+  await expect(page.getByText(/^alpha 0\.1\.\d+$/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Drop files here or click to choose files" })).toBeVisible();
   await expect(page.getByLabel("New name")).toHaveCount(0);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
