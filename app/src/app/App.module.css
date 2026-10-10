@@ -22,14 +22,14 @@
   gap: 12px;
 }
 .logoFrame {
-  width: 39px;
-  height: 39px;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
 }
 .logoFrame img {
-  width: 29px;
-  height: 29px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
 }
 .brand h1 {
@@ -274,8 +274,8 @@
   .header { height: 66px; }
   .headerInner { padding: 0 19px; }
   .brand h1 { font-size: 15px; }
-  .logoFrame { width: 35px; height: 35px; }
-  .logoFrame img { width: 27px; height: 27px; }
+  .logoFrame { width: 48px; height: 48px; }
+  .logoFrame img { width: 46px; height: 46px; }
   .main { padding: 0 18px 60px; }
   .emptyStage { min-height: calc(100dvh - 66px - 60px); }
   .dropZone { border-radius: 18px; height: min(55vh, 340px); min-height: 265px; }
