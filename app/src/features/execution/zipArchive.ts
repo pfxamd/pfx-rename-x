@@ -39,6 +39,7 @@ export async function createZipArchive(
   plan: ExecutionPlan,
   manifest: RenameManifest,
   onProgress?: ZipProgressHandler,
+  options: { includeManifest?: boolean } = {},
 ): Promise<Blob> {
   if (!plan.ready) {
     throw new Error("Execution plan is not ready.");
@@ -84,12 +85,14 @@ export async function createZipArchive(
       });
     }
 
-    const manifestEntry = new ZipPassThrough("pfx-rename-x-manifest.json");
-    zip.add(manifestEntry);
-    manifestEntry.push(
-      new TextEncoder().encode(JSON.stringify(manifest, null, 2)),
-      true,
-    );
+    if (options.includeManifest !== false) {
+      const manifestEntry = new ZipPassThrough("pfx-rename-x-manifest.json");
+      zip.add(manifestEntry);
+      manifestEntry.push(
+        new TextEncoder().encode(JSON.stringify(manifest, null, 2)),
+        true,
+      );
+    }
 
     zip.end();
   } catch (error) {
