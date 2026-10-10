@@ -24,8 +24,6 @@
 .logoFrame {
   width: 39px;
   height: 39px;
-  background: #17171a;
-  border-radius: 10px;
   display: grid;
   place-items: center;
 }
