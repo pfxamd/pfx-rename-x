@@ -2,10 +2,10 @@ import { execFileSync } from "node:child_process";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Commit immediately before the app's first alpha version badge.
-// The badge commit itself starts at alpha 0.1.0; each later mainline commit
-// advances the patch number without editing a version file or creating commits.
-const versionBaseline = "d30f94b4d67f5ba6d101dab2768f277dacfc68d6";
+// Initial alpha-badge commit. The first verified rollout following it starts
+// at alpha 0.1.0; subsequent mainline updates advance the patch number.
+// Rebuilding the same commit always reproduces the same version.
+const versionBaseline = "ff146923d74f2849590907303f2f84f1bbcc16e8";
 
 function appVersion(): string {
   const commitsSinceBaseline = Number(
