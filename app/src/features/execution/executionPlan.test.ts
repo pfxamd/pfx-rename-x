@@ -108,4 +108,48 @@ describe("execution plan", () => {
       },
     ]);
   });
+  it("includes unchanged selections in the simple download while preserving manifest-only defaults", () => {
+    const files = [appFile("1", "Artwork 01.jpg"), appFile("2", "other.png")];
+    const result = rename({
+      files: files.map((item) => item.input),
+      rules: [
+        {
+          id: "name",
+          type: "template",
+          version: 1,
+          enabled: true,
+          config: { pattern: "Artwork" },
+        },
+        {
+          id: "count",
+          type: "counter",
+          version: 1,
+          enabled: true,
+          config: { start: 1, step: 1, padding: 2, separator: " ", position: "suffix" },
+        },
+      ],
+    });
+    const defaultPlan = buildExecutionPlan(files, result);
+    const simplePlan = buildExecutionPlan(files, result, { includeUnchanged: true });
+
+    expect(result.valid).toBe(true);
+    expect(defaultPlan.items.map((item) => item.to)).toEqual(["Artwork 02.png"]);
+    expect(simplePlan.ready).toBe(true);
+    expect(simplePlan.items.map((item) => item.to)).toEqual(["Artwork 01.jpg", "Artwork 02.png"]);
+  });
+
+  it("permits an unchanged single filename as a direct download in the simplified workspace", () => {
+    const files = [appFile("1", "Art.png")];
+    const result = rename({
+      files: files.map((item) => item.input),
+      rules: [
+        { id: "same", type: "template", version: 1, enabled: true, config: { pattern: "Art" } },
+      ],
+    });
+    expect(result.valid).toBe(true);
+    const simplePlan = buildExecutionPlan(files, result, { includeUnchanged: true });
+    expect(simplePlan.ready).toBe(true);
+    expect(simplePlan.items.map(({ to }) => to)).toEqual(["Art.png"]);
+  });
+
 });

@@ -38,7 +38,10 @@ export function App() {
     [name, files.length],
   );
   const result = useMemo(() => buildPreview(files, rules, {}), [files, rules]);
-  const plan = useMemo(() => buildExecutionPlan(files, result), [files, result]);
+  const plan = useMemo(
+    () => buildExecutionPlan(files, result, { includeUnchanged: true }),
+    [files, result],
+  );
   const canDownload = name.trim().length > 0 && plan.ready && !working;
   const issue = name.trim() && result.issues.length > 0
     ? result.issues[0]?.message

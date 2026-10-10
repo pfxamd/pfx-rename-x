@@ -64,3 +64,100 @@ test("downloads one file directly without adding a sequence number", async ({ pa
   await page.getByRole("button", { name: "Download file" }).click();
   expect((await started).suggestedFilename()).toBe("Finished artwork.png");
 });
+
+
+test("renames 100 files including duplicate originals and keeps every byte", async ({ page }) => {
+  await page.goto("./");
+  const extensions = ["JPG", "png", "svg", "txt"];
+  const batch = Array.from({ length: 100 }, (_, i) => ({
+    name: "repeated." + extensions[i % extensions.length],
+    mimeType: "application/octet-stream",
+    buffer: Buffer.from("asset-" + String(i).padStart(3, "0")),
+  }));
+  await page.locator('input[type="file"]').setInputFiles(batch);
+  await expect(page.getByRole("heading", { name: "Files 100" })).toBeVisible();
+  await page.getByLabel("New name").fill("Portfolio");
+  await expect(page.getByText("Portfolio 01.JPG")).toBeVisible();
+  await expect(page.getByText("Portfolio 100.txt")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Download files" })).toBeEnabled();
+
+  const nextDownload = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download files" }).click();
+  const download = await nextDownload;
+  const archive = unzipSync(new Uint8Array(await readFile((await download.path())!)));
+  const names = Object.keys(archive);
+  expect(names).toHaveLength(100);
+  expect(names).not.toContain("pfx-rename-x-manifest.json");
+  expect(strFromU8(archive["Portfolio 01.JPG"]!)).toBe("asset-000");
+  expect(strFromU8(archive["Portfolio 100.txt"]!)).toBe("asset-099");
+});
+
+test("validates forbidden characters and long names without losing input", async ({ page }) => {
+  await page.goto("./");
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "photo.SUPERLONGFORMAT",
+    mimeType: "application/octet-stream",
+    buffer: Buffer.from("untouched"),
+  });
+
+  const field = page.getByLabel("New name");
+  await field.fill("bad/name");
+  await expect(page.getByRole("button", { name: "Download file" })).toBeDisabled();
+  await expect(page.getByRole("alert")).toContainText("invalid or non-portable characters");
+
+  await field.fill("a".repeat(240));
+  await expect(page.getByRole("button", { name: "Download file" })).toBeDisabled();
+  await expect(page.getByRole("alert")).toContainText("exceeds 255 characters");
+
+  await field.fill("Artist");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Download file" })).toBeEnabled();
+  const started = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download file" }).click();
+  expect((await started).suggestedFilename()).toBe("Artist.SUPERLONGFORMAT");
+});
+
+test("keeps a selected but already-matching name in the downloaded set", async ({ page }) => {
+  await page.goto("./");
+  await page.locator('input[type="file"]').setInputFiles([
+    { name: "Artwork 01.jpg", mimeType: "image/jpeg", buffer: Buffer.from("original-first") },
+    { name: "draft.png", mimeType: "image/png", buffer: Buffer.from("original-second") },
+  ]);
+  await page.getByLabel("New name").fill("Artwork");
+  await expect(page.getByText("Artwork 01.jpg")).toBeVisible();
+  await expect(page.getByText("Artwork 02.png")).toBeVisible();
+  const started = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download files" }).click();
+  const archive = unzipSync(new Uint8Array(await readFile((await started).path()!)));
+  expect(Object.keys(archive).sort()).toEqual(["Artwork 01.jpg", "Artwork 02.png"]);
+  expect(strFromU8(archive["Artwork 01.jpg"]!)).toBe("original-first");
+  expect(strFromU8(archive["Artwork 02.png"]!)).toBe("original-second");
+});
+
+test("keeps the core workflow usable on narrow screens in both themes", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Drop files here or click to choose files" })).toBeVisible();
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "رسم نهائي.png", mimeType: "image/png", buffer: Buffer.from("art"),
+  });
+  await page.getByLabel("New name").fill("لوحة فنية");
+  await expect(page.getByText("لوحة فنية.png")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Download file" })).toBeVisible();
+
+  for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    for (const mode of ["light", "dark"] as const) {
+      const toggle = page.getByRole("button", { name: "Switch to " + (mode === "light" ? "light" : "dark") + " mode" });
+      if (await toggle.count()) await toggle.click();
+      await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
+      const dimensions = await page.evaluate(() => ({
+        content: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+      await expect(page.getByLabel("New name")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Download file" })).toBeVisible();
+    }
+  }
+});

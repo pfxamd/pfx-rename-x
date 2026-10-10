@@ -5,6 +5,7 @@ import type { ExecutionIssue, ExecutionItem, ExecutionPlan } from "./types.js";
 export function buildExecutionPlan(
   files: AppFile[],
   result: RenameResult,
+  options: { includeUnchanged?: boolean } = {},
 ): ExecutionPlan {
   const issues: ExecutionIssue[] = [];
 
@@ -18,7 +19,17 @@ export function buildExecutionPlan(
   const filesById = new Map(files.map((file) => [file.id, file]));
   const items: ExecutionItem[] = [];
 
-  for (const entry of result.manifest.entries) {
+  // The streamlined workspace downloads every selected file, while other
+  // consumers can retain the manifest-only (changed-files) behavior.
+  const entries = options.includeUnchanged
+    ? result.preview.items.map((item) => ({
+        id: item.id,
+        from: item.originalName,
+        to: item.newName,
+      }))
+    : result.manifest.entries;
+
+  for (const entry of entries) {
     const source = filesById.get(entry.id);
 
     if (!source) {
@@ -47,7 +58,7 @@ export function buildExecutionPlan(
     });
   }
 
-  if (result.valid && result.manifest.entries.length === 0) {
+  if (result.valid && entries.length === 0) {
     issues.push({
       code: "NO_CHANGES",
       message: "There are no changed filenames to download.",
