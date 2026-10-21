@@ -115,7 +115,7 @@ export function App() {
           <div className={styles.brand}>
             <span className={styles.logoFrame}><img src={import.meta.env.BASE_URL + "brand/logo.svg"} alt="" /></span>
             <h1>PFx Rename X</h1>
-            <span className={styles.alphaBadge} aria-label={"Version " + __PFX_APP_VERSION__}>{__PFX_APP_VERSION__}</span>
+            <span className={styles.alphaBadge} aria-label={"Version " + __PFX_APP_RELEASE__.label}>{__PFX_APP_RELEASE__.label}</span>
           </div>
           <button
             className={styles.themeButton}

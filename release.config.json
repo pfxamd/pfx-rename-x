@@ -1,0 +1,23 @@
+{
+  "product": "PFx Rename X",
+  "channel": "Alpha",
+  "baseline": "49beafd4da116ee64f1bdd0a51ca7d69eaef71cf",
+  "baseVersion": "0.1.0",
+  "sourcePaths": [
+    "src",
+    "app",
+    "apps",
+    "public",
+    "assets",
+    "index.html",
+    "diagnostics",
+    "scripts",
+    "release.config.json",
+    "vite.config.ts",
+    "vite.config.js",
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    ".github/workflows"
+  ]
+}

@@ -1,4 +1,3 @@
 /// <reference types="vite/client" />
 
-// Injected once per build from first-parent Git history.
-declare const __PFX_APP_VERSION__: string;
+declare const __PFX_APP_RELEASE__: { version: string; channel: string; label: string; commit: string };
