@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { resolveRelease } from "../../../scripts/pfx-release.mjs";
 import { expect, test } from "@playwright/test";
 import { strFromU8, unzipSync } from "fflate";
 
@@ -8,7 +9,7 @@ test("keeps one simple flow for renaming and downloading a batch", async ({ page
   await page.reload();
 
   await expect(page.getByRole("heading", { name: "PFx Rename X" })).toBeVisible();
-  await expect(page.getByText(/^alpha 0\.1\.\d+$/)).toBeVisible();
+  await expect(page.getByText(resolveRelease().label, { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Drop files here or click to choose files" })).toBeVisible();
   await expect(page.getByLabel("New name")).toHaveCount(0);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
