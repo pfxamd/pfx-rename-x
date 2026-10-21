@@ -1,3 +1,19 @@
+/**
+ * ┌──────────────────────────────────────────────┐
+ * │                                              │
+ * │  PFxamd                                      │
+ * │  Ahmed                                       │
+ * │                                              │
+ * └──────────────────────────────────────────────┘
+ *
+ * @project     PFx Rename X
+ * @author      Ahmed
+ * @brand       PFxamd
+ * @website     https://www.pfxamd.com
+ * @repository  https://github.com/pfxamd/pfx-rename-x
+ * @license     Apache-2.0
+ */
+
 export { RenameEngine, rename } from "./core/engine.js";
 export { parseFilename, composeFilename } from "./filename/index.js";
 export { PfxRuleRegistry } from "./rules/registry.js";
